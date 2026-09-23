@@ -53,6 +53,22 @@ export const env = {
   // مدة صلاحية رابط استعادة كلمة المرور (بالدقايق)
   passwordResetMinutes: Number(process.env.PASSWORD_RESET_MINUTES) || 60,
 
+  // ===== كوكي الجلسة =====
+  cookie: {
+    // lax  = الواجهة والـ API تحت نفس الدومين (digitalad.sa و api.digitalad.sa)
+    //        ← الافتراضي، والأأمن، ومفيش أي كوكي بيعدّي بين دومينين
+    // none = دومينين مختلفين تمامًا (digitalad.sa و xxx.onrender.com)
+    //        ← بيشتغل بس سفاري بيمنعه وكروم بيضيّق عليه
+    sameSite: ["lax", "none", "strict"].includes((process.env.COOKIE_SAMESITE || "").toLowerCase())
+      ? process.env.COOKIE_SAMESITE.toLowerCase()
+      : "lax",
+
+    // سيبه فاضي في الحالة العادية — الكوكي بيتحفظ لدومين الـ API لوحده
+    // وده اللي احنا عايزينه. املاه بس لو محتاج الكوكي يشتغل على أكتر من
+    // دومين فرعي، مثلاً: .digitalad.sa
+    domain: (process.env.COOKIE_DOMAIN || "").trim(),
+  },
+
   storage: {
     // cloudinary (الافتراضي) أو local
     driver: (process.env.STORAGE_DRIVER || "cloudinary").toLowerCase(),
@@ -78,3 +94,19 @@ if (env.storage.driver === "cloudinary") {
 }
 
 export const isProd = env.nodeEnv === "production";
+
+// تنبيه لو الجلسة معتمدة على كوكي طرف تالت — ده بيقع عند ناس كتير
+// من غير ما تعرف السبب، فالأحسن يبان في اللوج من أول ثانية
+if (env.cookie.sameSite === "none") {
+  console.warn(
+    "⚠️  COOKIE_SAMESITE=none — يعني كوكي الجلسة بيعدّي بين دومينين مختلفين.\n" +
+      "   سفاري بيمنع ده افتراضيًا وكروم بيضيّق عليه، والنتيجة إن العملاء\n" +
+      "   هيتسجّل خروجهم من غير سبب واضح.\n" +
+      "   الحل: حط الـ API على دومين فرعي من دومين الموقع (api.example.com)\n" +
+      "   وبعدين شيل المتغير ده أو خليه lax.",
+  );
+}
+
+if (isProd && env.allowedOrigins.some((url) => url.startsWith("http://"))) {
+  console.warn("⚠️  فيه دومين في CLIENT_URL شغّال على http مش https — الكوكي مش هيشتغل معاه.");
+}

@@ -7,9 +7,11 @@ import { deleteImage, uploadImage } from "../services/storage.js";
 /** بيحوّل مستند الصفحة لكائن بسيط { texts: {}, images: {} } */
 function toPlain(doc) {
   return {
-    texts: doc ? Object.fromEntries(doc.texts) : {},
+    texts: doc ? { ...(doc.texts || {}) } : {},
     images: doc
-      ? Object.fromEntries([...doc.images].map(([key, value]) => [key, { url: value.url }]))
+      ? Object.fromEntries(
+          Object.entries(doc.images || {}).map(([key, value]) => [key, { url: value?.url }]),
+        )
       : {},
   };
 }
@@ -55,7 +57,10 @@ export const updateContent = asyncHandler(async (req, res) => {
   const textKeys = new Set(fields.filter((f) => f.type !== "image").map((f) => f.key));
   const imageKeys = new Set(fields.filter((f) => f.type === "image").map((f) => f.key));
 
-  const doc = (await PageContent.findById(page)) || new PageContent({ _id: page });
+  const doc = (await PageContent.findById(page)) || new PageContent({ _id: page, texts: {}, images: {} });
+  // احتياطًا لو مستند قديم اتسجّل من غير الحقلين دول
+  if (!doc.texts) doc.texts = {};
+  if (!doc.images) doc.images = {};
 
   // النصوص بتيجي كـ JSON في حقل texts (عشان الفورم بيتبعت FormData مع الصور)
   let texts = req.body.texts;
@@ -73,8 +78,8 @@ export const updateContent = asyncHandler(async (req, res) => {
 
       const clean = String(value ?? "").slice(0, 3000);
       // القيمة الفاضية معناها "رجّع الافتراضي"
-      if (clean.trim() === "") doc.texts.delete(key);
-      else doc.texts.set(key, clean);
+      if (clean.trim() === "") delete doc.texts[key];
+      else doc.texts[key] = clean;
     }
   }
 
@@ -82,9 +87,9 @@ export const updateContent = asyncHandler(async (req, res) => {
   for (const file of req.files || []) {
     if (!imageKeys.has(file.fieldname)) continue;
 
-    const old = doc.images.get(file.fieldname);
+    const old = doc.images[file.fieldname];
     const uploaded = await uploadImage(file, `pages/${page}`);
-    doc.images.set(file.fieldname, uploaded);
+    doc.images[file.fieldname] = uploaded;
     await deleteImage(old?.publicId);
   }
 
@@ -100,10 +105,14 @@ export const updateContent = asyncHandler(async (req, res) => {
 
   for (const key of resetImages || []) {
     if (!imageKeys.has(key)) continue;
-    const old = doc.images.get(key);
-    doc.images.delete(key);
+    const old = doc.images[key];
+    delete doc.images[key];
     await deleteImage(old?.publicId);
   }
+
+  // Mixed مش Map — لازم نعلّمها "اتعدّلت" يدويًا عشان Mongoose يحفظ التغيير
+  doc.markModified("texts");
+  doc.markModified("images");
 
   doc.updatedBy = req.user._id;
   await doc.save();
@@ -116,7 +125,7 @@ export const resetContent = asyncHandler(async (req, res) => {
   const doc = await PageContent.findById(req.params.page);
   if (!doc) return res.json({ success: true, message: "الصفحة على الافتراضي أصلاً" });
 
-  for (const [, value] of doc.images) await deleteImage(value?.publicId);
+  for (const value of Object.values(doc.images || {})) await deleteImage(value?.publicId);
   await doc.deleteOne();
 
   res.json({ success: true, message: "رجّعنا الصفحة للنص الافتراضي" });

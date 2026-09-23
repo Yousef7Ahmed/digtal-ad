@@ -98,108 +98,6 @@ export const PAGE_SCHEMA = [
     ],
   },
 
-  // ===================== الحلول الرقمية =====================
-  {
-    key: "solutions",
-    title: "الحلول الرقمية",
-    path: "/solutions",
-    icon: "spark",
-    sections: [
-      {
-        title: "الواجهة الأولى",
-        fields: [
-          { key: "hero.badge", label: "الشارة", type: "text", default: "الأنظمة والمنتجات الرقمية" },
-          { key: "hero.title1", label: "العنوان — السطر الأول", type: "text", default: "حلول برمجية مبتكرة" },
-          { key: "hero.title2", label: "العنوان — السطر الملوّن", type: "text", default: "لتحقيق رؤيتك الرقمية" },
-          {
-            key: "hero.subtitle",
-            label: "النص تحت العنوان",
-            type: "textarea",
-            default:
-              "من تصميم واجهات المستخدم الجذابة إلى تطوير أنظمة إدارة الموارد المعقدة (ERP). نحن في Digital AD نقدم باقة متكاملة من المنتجات الرقمية لتطوير أعمالك.",
-          },
-          { key: "hero.primaryCta", label: "الزرار الأساسي", type: "text", default: "اطلب حلاً برمجياً" },
-          { key: "hero.secondaryCta", label: "الزرار الثاني", type: "text", default: "اكتشف الحلول" },
-        ],
-      },
-      {
-        title: "الخدمات البرمجية",
-        fields: [
-          { key: "list.title", label: "عنوان القسم", type: "text", default: "خدماتنا البرمجية" },
-          { key: "card1.title", label: "الكارت الأول — العنوان", type: "text", default: "تصميم واجهات وتجربة المستخدم (UI/UX)" },
-          {
-            key: "card1.desc",
-            label: "الكارت الأول — الوصف",
-            type: "textarea",
-            default:
-              "نصمم واجهات رقمية جذابة وسهلة الاستخدام تركز على تلبية احتياجات المستخدمين وتحقيق أهداف أعمالك. نحول الأفكار المعقدة إلى تجارب تفاعلية ممتعة.",
-          },
-          { key: "card2.title", label: "الكارت الثاني — العنوان", type: "text", default: "تطوير المواقع الإلكترونية" },
-          {
-            key: "card2.desc",
-            label: "الكارت الثاني — الوصف",
-            type: "textarea",
-            default:
-              "نبني مواقع ويب سريعة، آمنة، ومتجاوبة مع جميع الأجهزة. سواء كنت تحتاج إلى موقع تعريفي لشركتك أو منصة تجارة إلكترونية معقدة، نحن هنا لتنفيذها.",
-          },
-          { key: "card3.title", label: "الكارت الثالث — العنوان", type: "text", default: "أنظمة تخطيط الموارد (ERP Systems)" },
-          {
-            key: "card3.desc",
-            label: "الكارت الثالث — الوصف",
-            type: "textarea",
-            default:
-              "حلول برمجية متكاملة لإدارة جميع أقسام وموارد شركتك من مكان واحد. نخصص النظام ليناسب حجم أعمالك ويساعدك في أتمتة العمليات وزيادة الإنتاجية.",
-          },
-          { key: "list.cardCta", label: "رابط الكروت", type: "text", default: "طلب الخدمة" },
-        ],
-      },
-      {
-        title: "كارت المتجر",
-        fields: [
-          { key: "store.label", label: "العنوان الصغير", type: "text", default: "جاهزة للاستخدام" },
-          { key: "store.title", label: "العنوان", type: "text", default: "قوالب ومنتجات جاهزة" },
-          {
-            key: "store.text",
-            label: "النص",
-            type: "textarea",
-            default:
-              "نوفر مجموعة واسعة من القوالب البرمجية والمنتجات الرقمية الجاهزة في متجرنا. اختصر الوقت وابدأ مشروعك الآن.",
-          },
-          { key: "store.button", label: "الزرار", type: "text", default: "تصفح المتجر" },
-        ],
-      },
-      {
-        title: "كارت الأعمال",
-        fields: [
-          { key: "works.label", label: "العنوان الصغير", type: "text", default: "سجل الإنجازات" },
-          { key: "works.title", label: "العنوان", type: "text", default: "استكشف أعمالنا" },
-          {
-            key: "works.text",
-            label: "النص",
-            type: "textarea",
-            default:
-              "ألق نظرة على مشاريعنا السابقة والحلول البرمجية التي قمنا بتنفيذها لعملائنا في مختلف القطاعات.",
-          },
-          { key: "works.button", label: "الزرار", type: "text", default: "شاهد سابقة الأعمال" },
-        ],
-      },
-      {
-        title: "الدعوة للتواصل",
-        fields: [
-          { key: "cta.title", label: "العنوان", type: "text", default: "هل لديك فكرة مشروع برمجي؟" },
-          {
-            key: "cta.subtitle",
-            label: "النص",
-            type: "text",
-            default: "فريق Digital AD جاهز لتحويل فكرتك إلى واقع تقني بأعلى معايير الجودة.",
-          },
-          { key: "cta.button", label: "الزرار", type: "text", default: "تواصل معنا الآن" },
-        ],
-      },
-    ],
-  },
-
-  // ===================== خدماتنا =====================
   {
     key: "services",
     title: "صفحة خدماتنا",
@@ -398,11 +296,6 @@ const SEO_DEFAULTS = {
     title: "Digital AD | وكالة الإعلان الرقمي في الرياض",
     description:
       "وكالة إعلان رقمي في الرياض متخصصة في الدعاية والإعلان، الطباعة، تجهيز المعارض، والهدايا الدعائية. خبرة منذ 2017 وأكثر من 500 مشروع ناجح.",
-  },
-  solutions: {
-    title: "الحلول الرقمية | Digital AD",
-    description:
-      "حلول رقمية متكاملة: تصميم المواقع، إدارة السوشيال ميديا، الحملات الإعلانية، والهوية البصرية — من وكالة الإعلان الرقمي بالرياض.",
   },
   services: {
     title: "خدماتنا | دعاية وإعلان وطباعة في الرياض",
